@@ -1,0 +1,79 @@
+﻿@model (IEnumerable<Money>, decimal, decimal);
+
+@{
+    ViewData["Title"] = "หน้าแรก";
+    decimal weekly_used = Model.Item2;
+    decimal left_used = Model.Item3;
+    decimal left = weekly_used;
+}
+
+<div class="text-center my-4">
+    <h1 class="" style="color: mediumslateblue">บันทึกรายรับ-รายจ่าย</h1>
+    <a class="btn btn-success" asp-controller="Money" asp-action="Create">เพิ่มรายการ</a>
+</div>
+
+@if (Model.Item1.Count() == 0)
+{
+    <div class="alert alert-secondary">ไม่มีรายการรายรับ-รายจ่าย</div>
+}
+else
+{
+    <strong class="text-success">จำนวนที่ใช้ได้ : @weekly_used , 
+        @if (left_used > 0)
+        {
+            <span class="text-success">จำนวนคงเหลือ : @left_used</span>
+        }
+        else
+        {
+            <span class="text-danger">จำนวนคงเหลือ : @left_used</span>
+        }
+    </strong>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>วันที่</th>
+                <th>จำนวนเงิน</th>
+                <th>บันทึกช่วยจำ</th>
+                <th>ยอดคงเหลือ</th>
+                <th>แก้ไข</th>
+                <th>ลบ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var money in Model.Item1)
+            {
+                <tr>
+                    <td>@money.Date</td>
+                    <td>@money.Amount</td>
+                    <td>@money.Label</td>
+                    @{
+                        left -= money.Amount;
+                    }
+                    <td>
+                        @if (left > 0)
+                        {
+                            <p class="text-success">@left</p>
+                        }
+                        else
+                        {
+                            <p class="text-danger">@left</p>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-warning"
+                           asp-controller="Money"
+                           asp-action="Edit"
+                           asp-route-id="@money.Id">แก้ไข</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger"
+                           asp-controller="Money"
+                           asp-action="Delete"
+                           asp-route-id="@money.Id"
+                           onclick="return confirm('ต้องการลบรายการ @money.Label จำนวน @money.Amount บาท ของวันที่ @money.Date หรือไม่ ?')">ลบ</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
