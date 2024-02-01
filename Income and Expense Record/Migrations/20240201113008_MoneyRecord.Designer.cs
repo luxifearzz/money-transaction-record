@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Income_and_Expense_Record.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240130112106_AddMoneyRecord")]
-    partial class AddMoneyRecord
+    [Migration("20240201113008_MoneyRecord")]
+    partial class MoneyRecord
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,29 @@ namespace Income_and_Expense_Record.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Moneys");
+                });
+
+            modelBuilder.Entity("Income_and_Expense_Record.Models.Transaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Transactions");
                 });
 #pragma warning restore 612, 618
         }

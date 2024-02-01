@@ -5,11 +5,13 @@
     decimal weekly_used = Model.Item2;
     decimal left_used = Model.Item3;
     decimal left = weekly_used;
+    var before = DateTime.Now.Date;
 }
 
 <div class="text-center my-4">
     <h1 class="" style="color: mediumslateblue">บันทึกรายรับ-รายจ่าย</h1>
     <a class="btn btn-success" asp-controller="Money" asp-action="Create">เพิ่มรายการ</a>
+    <a class="btn btn-info" asp-controller="Money" asp-action="TransferData">จัดเก็บ</a>
 </div>
 
 @if (Model.Item1.Count() == 0)
@@ -43,7 +45,18 @@ else
             @foreach (var money in Model.Item1)
             {
                 <tr>
-                    <td>@money.Date</td>
+                    @{
+                        var money_date = money.Date.Date;
+                        if (money_date == before)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>@money_date.ToString("dd/MM/yyyy")</td>
+                            before = money_date;
+                        }
+                    }
                     <td>@money.Amount</td>
                     <td>@money.Label</td>
                     @{

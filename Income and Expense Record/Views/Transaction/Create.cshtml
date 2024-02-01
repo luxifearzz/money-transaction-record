@@ -1,11 +1,11 @@
-﻿@model Money;
+﻿@model Transaction;
 
 @{
     ViewData["Title"] = "บันทึกข้อมูล";
 }
 
 <h1 class="text-center">บันทึกรายการ</h1>
-<form method="POST" asp-controller="Money" asp-action="Create">
+<form method="POST" asp-controller="Transaction" asp-action="Create">
     <div class="form-group my-3">
         <label asp-for="Date"></label>
         <input type="date" step="1" asp-for="Date" class="form-control" />

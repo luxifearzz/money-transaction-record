@@ -5,27 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Income_and_Expense_Record.Controllers
 {
-    public class MoneyController : Controller
+    public class TransactionController : Controller
     {
-        private decimal weekly_used = 1400;
-        private decimal left = 1400;
-
         private readonly ApplicationDBContext _db;
 
-        public MoneyController(ApplicationDBContext db)
+        public TransactionController(ApplicationDBContext db)
         {
             _db = db;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Money> transactionList = _db.Moneys.FromSql($"select * from Moneys order by Date");
-            foreach (var money in transactionList)
-            {
-                left -= money.Amount;
-            }
-            (IEnumerable<Money>, decimal, decimal) tuple = (transactionList, weekly_used, left);
-            return View(tuple);
+            IEnumerable<Transaction> transactionList = _db.Transactions.FromSql($"select * from Transactions order by Date");
+            return View(transactionList);
         }
 
         public IActionResult Create()
@@ -35,11 +27,11 @@ namespace Income_and_Expense_Record.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Money obj)
+        public IActionResult Create(Transaction obj)
         {
             if (ModelState.IsValid)
             {
-                _db.Moneys.Add(obj);
+                _db.Transactions.Add(obj);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -52,7 +44,7 @@ namespace Income_and_Expense_Record.Controllers
             {
                 return NotFound();
             }
-            var obj = _db.Moneys.Find(id);
+            var obj = _db.Transactions.Find(id);
             if (obj == null)
             {
                 return NotFound();
@@ -62,11 +54,11 @@ namespace Income_and_Expense_Record.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Money obj)
+        public IActionResult Edit(Transaction obj)
         {
             if (ModelState.IsValid)
             {
-                _db.Moneys.Update(obj);
+                _db.Transactions.Update(obj);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -79,26 +71,21 @@ namespace Income_and_Expense_Record.Controllers
             {
                 return NotFound();
             }
-            var obj = _db.Moneys.Find(id);
+            var obj = _db.Transactions.Find(id);
             if (obj == null)
             {
                 return NotFound();
             }
-            _db.Moneys.Remove(obj);
+            _db.Transactions.Remove(obj);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        public IActionResult TransferData()
+        public IActionResult Clear()
         {
-            foreach (var item in _db.Moneys)
+            foreach (var transaction in _db.Transactions)
             {
-                var transaction = new Transaction();
-                transaction.Date = item.Date;
-                transaction.Amount = item.Amount;
-                transaction.Label = item.Label;
-                _db.Transactions.Add(transaction);
-                _db.Moneys.Remove(item);
+                _db.Transactions.Remove(transaction);
             }
             _db.SaveChanges();
             return RedirectToAction("Index");
