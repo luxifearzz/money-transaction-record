@@ -3,7 +3,6 @@ using Income_and_Expense_Record.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Data.SqlTypes;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 
