@@ -5,13 +5,14 @@
     decimal weekly_used = Model.Item2;
     decimal left_used = Model.Item3;
     decimal left = weekly_used;
-    var before = DateTime.Now.Date;
+    DateTime? before = null;
 }
 
 <div class="text-center my-4">
     <h1 class="" style="color: mediumslateblue">บันทึกรายรับ-รายจ่าย</h1>
-    <a class="btn btn-success" asp-controller="Money" asp-action="Create">เพิ่มรายการ</a>
-    <a class="btn btn-info" asp-controller="Money" asp-action="TransferData">จัดเก็บ</a>
+    <a class="btn btn-success mx-1" asp-controller="Money" asp-action="Create">เพิ่มรายการ</a>
+    <a class="btn btn-info mx-1" onclick="return confirm('ต้องการจัดเก็บข้อมูลหรือไม่?')" asp-controller="Money" asp-action="TransferData">จัดเก็บ</a>
+    <a class="btn btn-danger mx-1" asp-controller="Money" asp-action="Clear" onclick="return confirm('ต้องการลบรายการทั้งหมดจริงหรือไม่!!?!') && confirm('ชัวร์นะ??')">ลบรายการทั้งหมด!!</a>
 </div>
 
 @if (Model.Item1.Count() == 0)

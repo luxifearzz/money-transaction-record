@@ -30,7 +30,17 @@ namespace Income_and_Expense_Record.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var obj = new Money();
+            Money? objFromDb = _db.Moneys.FromSql($"select top 1 * from Moneys order by Date DESC").FirstOrDefault();
+            if (objFromDb != null)
+            {
+                obj.Date = objFromDb.Date;
+            }
+            else
+            {
+                obj.Date = DateTime.Now;
+            }
+            return View(obj);
         }
 
         [HttpPost]
@@ -99,6 +109,16 @@ namespace Income_and_Expense_Record.Controllers
                 transaction.Label = item.Label;
                 _db.Transactions.Add(transaction);
                 _db.Moneys.Remove(item);
+            }
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Clear()
+        {
+            foreach (var money in _db.Moneys)
+            {
+                _db.Moneys.Remove(money);
             }
             _db.SaveChanges();
             return RedirectToAction("Index");

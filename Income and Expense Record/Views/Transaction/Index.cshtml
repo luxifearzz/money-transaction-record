@@ -7,8 +7,8 @@
 
 <div class="text-center my-4">
     <h1 class="" style="color: mediumslateblue">ประวัติรายรับ-ร่ายจ่ายทั้งหมด</h1>
-    <a class="btn btn-success" asp-controller="Transaction" asp-action="Create">เพิ่มรายการ</a>
-    <a class="btn btn-danger" asp-controller="Transaction" asp-action="Clear" onclick="return confirm('ต้องการลบรายการทั้งหมดจริงหรือไม่!!?!') && confirm('ชัวร์นะ??')">ลบรายการทั้งหมด!!</a>
+    <a class="btn btn-success mx-1" asp-controller="Transaction" asp-action="Create">เพิ่มรายการ</a>
+    <a class="btn btn-danger mx-1" asp-controller="Transaction" asp-action="Clear" onclick="return confirm('ต้องการลบรายการทั้งหมดจริงหรือไม่!!?!') && confirm('ชัวร์นะ??')">ลบรายการทั้งหมด!!</a>
 </div>
 
 @if (Model.Count() == 0)

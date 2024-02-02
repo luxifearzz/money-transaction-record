@@ -19,5 +19,11 @@ namespace Income_and_Expense_Record.Models
         [Required(ErrorMessage ="ระบุบันทึก")]
         [DisplayName("บันทึกช่วยจำ")]
         public string Label { get; set; }
+
+        override
+        public string ToString()
+        {
+            return $"{Id} {Date} {Amount} {Label}";
+        }
     }
 }
