@@ -1,23 +1,27 @@
-﻿@model IEnumerable<Transaction>;
+﻿@model (IEnumerable<Transaction>, string, string, decimal);
 
 @{
     ViewData["Title"] = "หน้าแรก";
     var before = DateTime.Now;
+    var date = Model.Item2;
+    var label = Model.Item3;
+    var sum_price = Model.Item4;
 }
 
 <div class="text-center my-4">
-    <h1 class="" style="color: mediumslateblue">ประวัติรายรับ-ร่ายจ่ายทั้งหมด</h1>
-    <a class="btn btn-success mx-1" asp-controller="Transaction" asp-action="Create">เพิ่มรายการ</a>
-    <a class="btn btn-danger mx-1" asp-controller="Transaction" asp-action="Clear" onclick="return confirm('ต้องการลบรายการทั้งหมดจริงหรือไม่!!?!') && confirm('ชัวร์นะ??')">ลบรายการทั้งหมด!!</a>
-    <a class="btn btn-secondary mx-1" asp-controller="Transaction" asp-action="Filter">Filter</a>
+    <h1 class="" style="color: mediumslateblue">ประวัติรายรับ-ร่ายจ่ายทั้งหมดของวันที่ @date รายการชื่อ @label</h1>
+    <a class="btn btn-primary mx-1" asp-controller="Transaction" asp-action="Index">กลับหน้าประวัติ</a>
+    <a class="btn btn-secondary mx-1" asp-controller="Transaction" asp-action="Filter">แก้ไข filter</a>
+    @* <a class="btn btn-secondary mx-1" href='javascript:history.go(-1)'>แก้ไข filter</a> *@
 </div>
 
-@if (Model.Count() == 0)
+@if (Model.Item1.Count() == 0)
 {
     <div class="alert alert-secondary">ไม่มีรายการรายรับ-รายจ่าย</div>
 }
 else
 {
+    <strong class="text-success">ราคารวม : @sum_price บาท</strong>
     <table class="table">
         <thead>
             <tr>
@@ -29,7 +33,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var transaction in Model)
+            @foreach (var transaction in Model.Item1)
             {
                 <tr>
                     @{
