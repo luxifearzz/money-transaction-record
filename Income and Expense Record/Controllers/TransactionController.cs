@@ -102,44 +102,69 @@ namespace Income_and_Expense_Record.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult FilterIndex(Transaction obj)
+        public IActionResult FilterIndex(Filter obj)
         {
-            bool isDate = obj.Date != DateTime.MinValue;
+            bool isStartDate = obj.StartDate != DateTime.MinValue;
+            bool isEndDate = obj.EndDate != DateTime.MinValue;
             bool isLabel = !obj.Label.IsNullOrEmpty();
-            string date = "";
-            string label = "";
-            string query = "";
-            decimal sum = 0;
-            string sqlDate = "";
+            string orderBy = obj.OrderBy;
+            bool isDesc = obj.IsDesc;
+            string orderType = isDesc ? "desc" : "asc";
 
-            if (isDate)
+            string query = "";
+
+            string startDate = "...";
+            string endDate = "...";
+            string label = isLabel ? obj.Label : "...";
+            string sqlStartDate = "...";
+            string sqlEndDate = "...";
+            bool isAlrCondition = false;
+            decimal sum = 0;
+            
+            if (isStartDate)
             {
-                sqlDate = "'" + obj.Date.ToString("yyyy-MM-dd", CultureInfo.GetCultureInfo(culture)) + " 00:00:00.0000000" + "'";
+                sqlStartDate = "'" + obj.StartDate.ToString("yyyy-MM-dd", CultureInfo.GetCultureInfo(culture)) + " 00:00:00.0000000" + "'";
             }
-            if (isDate && isLabel)
+            if (isEndDate)
             {
-                date = obj.Date.Date.ToString("yyyy/MM/dd");
-                label = obj.Label;
-                query = "select * from Transactions where Date = " + sqlDate + " and Label like '%" + obj.Label + "%' order by Date";
+                sqlEndDate = "'" + obj.EndDate.ToString("yyyy-MM-dd", CultureInfo.GetCultureInfo(culture)) + " 00:00:00.0000000" + "'";
             }
-            else if (isDate && !isLabel) 
+            if (isStartDate && !isEndDate)
             {
-                date = obj.Date.Date.ToString("yyyy/MM/dd");
-                label = "...";
-                query = "select * from Transactions where Date = " + sqlDate + " order by Date";
+                startDate = obj.StartDate.Date.ToString("yyyy/MM/dd");
+                query = "select * from Transactions where Date >= " + sqlStartDate + " ";
+                isAlrCondition = true;
             }
-            else if (!isDate && isLabel)
+            else if (!isStartDate && isEndDate)
             {
-                date = "...";
-                label = obj.Label;
-                query = "select * from Transactions where Label like '%" + obj.Label + "%' order by Date";
+                endDate = obj.EndDate.Date.ToString("yyyy/MM/dd");
+                query = "select * from Transactions where Date <= " + sqlEndDate + " ";
+                isAlrCondition = true;
             }
-            else if (!isDate && !isLabel)
+            else if (isStartDate && isEndDate)
             {
-                date = "...";
-                label = "...";
-                query = "select * from Transactions order by date";
+                startDate = obj.StartDate.Date.ToString("yyyy/MM/dd");
+                endDate = obj.EndDate.Date.ToString("yyyy/MM/dd");
+                query = "select * from Transactions where Date >= " + sqlStartDate + " and Date <= " + sqlEndDate + " ";
+                isAlrCondition = true;
             }
+            else
+            {
+                query = "select * from Transactions ";
+            }
+            if (isLabel)
+            {
+                if (isAlrCondition)
+                {
+                    query += "and Label like '%" + obj.Label + "%' ";
+                }
+                else
+                {
+                    query += "where Label like '%" + obj.Label + "%' ";
+                }
+            }
+            query += "order by " + orderBy + " ";
+            query += orderType;
 
             var fQuery = FormattableStringFactory.Create(query);
             IEnumerable<Transaction> transactionList = _db.Transactions.FromSql(fQuery);
@@ -147,11 +172,14 @@ namespace Income_and_Expense_Record.Controllers
             foreach (var transaction in transactionList)
             {
                 sum += transaction.Amount;
+                
             }
 
-            (IEnumerable<Transaction>, string, string, decimal) tuple = (transactionList, date,  label, sum);
+            (IEnumerable<Transaction>, string, string, string, string, string, decimal) tuple = (transactionList, startDate, endDate, label, orderBy, orderType, sum);
 
             return View(tuple);
         }
+
+        
     }
 }

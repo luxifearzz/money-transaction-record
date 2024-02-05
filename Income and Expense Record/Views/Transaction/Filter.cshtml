@@ -1,4 +1,4 @@
-﻿@model Transaction;
+﻿@model Filter;
 
 @{
     ViewData["Title"] = "Filter";
@@ -8,12 +8,28 @@
 
 <form method="POST" asp-controller="Transaction" asp-action="FilterIndex">
     <div class="form-group my-3">
-        <label asp-for="Date"></label>
-        <input type="date" step="1" asp-for="Date" class="form-control" />
+        <label asp-for="StartDate">วันที่เริ่มต้น</label>
+        <input type="date" step="1" asp-for="StartDate" class="form-control" />
+    </div>
+    <div class="form-group my-3">
+        <label asp-for="EndDate">วันสิ้นสุด</label>
+        <input type="date" step="1" asp-for="EndDate" class="form-control" />
     </div>
     <div class="form-group my-3">
         <label asp-for="Label">รายละเอียด</label>
         <input type="text" asp-for="Label" class="form-control" />
+    </div>
+    <div class="form-group my-3">
+        <label asp-for="OrderBy">เรียงโดย?</label>
+        <select asp-for="OrderBy" class="form-control" required>
+            <option value="Date">Date (Default)</option>
+            <option value="Label">Label</option>
+            <option value="Amount">Amount</option>
+        </select>
+    </div>
+    <div class="form-group my-3">
+        <input type="checkbox" asp-for="IsDesc" />
+        <label asp-for="IsDesc">*เรียงจากมากไปน้อย</label>
     </div>
     <button type="submit" class="btn btn-primary my-3">คัดกรอง</button>
 </form>

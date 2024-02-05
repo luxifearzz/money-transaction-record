@@ -1,15 +1,20 @@
-﻿@model (IEnumerable<Transaction>, string, string, decimal);
+﻿@model (IEnumerable<Transaction>, string, string, string, string, string, decimal);
 
 @{
     ViewData["Title"] = "หน้าแรก";
     var before = DateTime.Now;
-    var date = Model.Item2;
-    var label = Model.Item3;
-    var sum_price = Model.Item4;
+    var transactionList = Model.Item1;
+    var startDate = Model.Item2;
+    var endDate = Model.Item3;
+    var label = Model.Item4;
+    var orderBy = Model.Item5;
+    var orderType = Model.Item6;
+    var sum_price = Model.Item7;
 }
 
 <div class="text-center my-4">
-    <h1 class="" style="color: mediumslateblue">ประวัติรายรับ-ร่ายจ่ายทั้งหมดของวันที่ @date รายการชื่อ @label</h1>
+    <h1 class="" style="color: mediumslateblue">ประวัติรายรับ-ร่ายจ่ายทั้งหมดของวันที่ @startDate ถึงวันที่ @endDate รายการชื่อ @label</h1>
+    <h3 class="" style="color: mediumslateblue">เรียงจาก @orderBy แบบ @orderType</h3>
     <a class="btn btn-primary mx-1" asp-controller="Transaction" asp-action="Index">กลับหน้าประวัติ</a>
     <a class="btn btn-secondary mx-1" asp-controller="Transaction" asp-action="Filter">แก้ไข filter</a>
     @* <a class="btn btn-secondary mx-1" href='javascript:history.go(-1)'>แก้ไข filter</a> *@
@@ -33,7 +38,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var transaction in Model.Item1)
+            @foreach (var transaction in transactionList)
             {
                 <tr>
                     @{
