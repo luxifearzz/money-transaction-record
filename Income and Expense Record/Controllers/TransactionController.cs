@@ -172,7 +172,6 @@ namespace Income_and_Expense_Record.Controllers
             foreach (var transaction in transactionList)
             {
                 sum += transaction.Amount;
-                
             }
 
             (IEnumerable<Transaction>, string, string, string, string, string, decimal) tuple = (transactionList, startDate, endDate, label, orderBy, orderType, sum);
