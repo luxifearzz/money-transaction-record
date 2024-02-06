@@ -1,6 +1,7 @@
 ﻿using Income_and_Expense_Record.Data;
 using Income_and_Expense_Record.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
@@ -97,6 +98,18 @@ namespace Income_and_Expense_Record.Controllers
 
         public IActionResult Filter()
         {
+            IEnumerable<string> labelList = _db.Transactions.Select(t => t.Label).Distinct();
+
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            items.Add(new SelectListItem { Text = "ไม่กำหนด", Value = "" });
+            foreach (var label in labelList)
+            {
+                items.Add(new SelectListItem { Text = label, Value = label });
+            }
+
+            ViewBag.LabelList = items;
+
             return View();
         }
 
