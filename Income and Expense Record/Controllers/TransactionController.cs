@@ -22,7 +22,16 @@ namespace Income_and_Expense_Record.Controllers
         public IActionResult Index()
         {
             IEnumerable<Transaction> transactionList = _db.Transactions.FromSql($"select * from Transactions order by Date");
-            return View(transactionList);
+
+            decimal sum = 0;
+            foreach (var transaction in transactionList)
+            {
+                sum += transaction.Amount;
+            }
+
+            (IEnumerable<Transaction>, decimal) tuple = (transactionList, sum);
+
+            return View(tuple);
         }
 
         public IActionResult Create()

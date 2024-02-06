@@ -1,7 +1,11 @@
-﻿@model IEnumerable<Transaction>;
+﻿@model (IEnumerable<Transaction>, decimal);
 
 @{
     ViewData["Title"] = "หน้าแรก";
+
+    var transactionList = Model.Item1;
+    var sum_price = Model.Item2;
+
     var before = DateTime.Now;
 }
 
@@ -12,12 +16,17 @@
     <a class="btn btn-secondary mx-1" asp-controller="Transaction" asp-action="Filter">Filter</a>
 </div>
 
-@if (Model.Count() == 0)
+@if (transactionList.Count() == 0)
 {
     <div class="alert alert-secondary">ไม่มีรายการรายรับ-รายจ่าย</div>
 }
 else
 {
+    <div class="table-header-text">
+        <input type="checkbox" class="form-check-input" id="showSumCheckbox" />
+        <span style="color: orangered;">แสดงรายจ่ายรวม</span>
+        <strong id="sumPrice" class="text-success" style="display: none;">รายจ่ายรวม : @sum_price บาท</strong>
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -29,18 +38,18 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var transaction in Model)
+            @foreach (var transaction in transactionList)
             {
                 <tr>
                     @{
                         var transaction_date = transaction.Date.Date;
                         if (transaction_date == before)
                         {
-                            <td></td>
+                                    <td></td>
                         }
                         else
                         {
-                            <td>@transaction_date.ToString("dd/MM/yyyy")</td>
+                                    <td>@transaction_date.ToString("dd/MM/yyyy")</td>
                             before = transaction_date;
                         }
                     }
@@ -63,4 +72,19 @@ else
             }
         </tbody>
     </table>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        document.getElementById("showSumCheckbox").addEventListener('change', () => {
+            var showSumCheckbox = document.getElementById("showSumCheckbox");
+            var sumPrice = document.getElementById("sumPrice");
+
+            if (showSumCheckbox.checked) {
+                sumPrice.style.display = "block";
+            } else {
+                sumPrice.style.display = "none";
+            }
+        })
+    </script>
 }
