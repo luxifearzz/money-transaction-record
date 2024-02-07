@@ -129,9 +129,9 @@ namespace Income_and_Expense_Record.Controllers
             bool isStartDate = obj.StartDate != DateTime.MinValue;
             bool isEndDate = obj.EndDate != DateTime.MinValue;
             bool isLabel = !obj.Label.IsNullOrEmpty();
-            string orderBy = obj.OrderBy;
+            string orderBy = obj.OrderBy == null ? "Date" : obj.OrderBy;
             bool isDesc = obj.IsDesc;
-            string orderType = isDesc ? "desc" : "asc";
+            string orderType = isDesc ? "desc" : "";
 
             string query = "";
 
@@ -195,6 +195,8 @@ namespace Income_and_Expense_Record.Controllers
             {
                 sum += transaction.Amount;
             }
+
+            orderType = isDesc ? "desc" : "normal";
 
             (IEnumerable<Transaction>, string, string, string, string, string, decimal) tuple = (transactionList, startDate, endDate, label, orderBy, orderType, sum);
 

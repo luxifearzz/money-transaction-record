@@ -17,45 +17,78 @@
     </div>
     <div class="form-group my-3">
         <label asp-for="Label">รายละเอียด</label>
-        <input id="textInput" type="text" asp-for="Label" class="form-control" />
-        <select id="labelList" asp-for="Label" asp-items="@(ViewBag.LabelList as List<SelectListItem>)"></select>
+        <input id="labelText" type="text" asp-for="Label" class="form-control" />
+        <select id="labelList" asp-for="Label" asp-items="@(ViewBag.LabelList as List<SelectListItem>)" class="btn btn-secondary dropdown-toggle"></select>
     </div>
     <div class="form-group my-3">
         <label asp-for="OrderBy">เรียงโดย?</label>
-        <select asp-for="OrderBy" class="form-control" required>
-            <option value="Date">Date (Default)</option>
+        <input id="orderText" type="text" asp-for="OrderBy" class="form-control" value="Date" />
+        <select id="orderList" asp-for="OrderBy" class="btn btn-secondary dropdown-toggle" required>
+            <option value="Date" selected>Date (Default)</option>
             <option value="Label">Label</option>
             <option value="Amount">Amount</option>
         </select>
-    </div>
-    <div class="form-group my-3">
-        <input type="checkbox" asp-for="IsDesc" />
-        <label asp-for="IsDesc">*เรียงจากมากไปน้อย</label>
+        <input id="isDescCheckbox" type="checkbox" asp-for="IsDesc" />
+        <label id="isDescLabel" asp-for="IsDesc">*เรียงจากมากไปน้อย</label>
     </div>
     <button type="submit" class="btn btn-primary my-3">คัดกรอง</button>
 </form>
 
 @section Scripts {
     <script type="text/javascript">
-        document.getElementById("textInput").addEventListener('keyup', () => {
-            var textInput = document.getElementById("textInput");
-            var labelList = document.getElementById("labelList");
-
-            for (var i, j = 0; i = labelList.options[j]; j++) {
-                if (textInput.value == i.value) {
-                    labelList.selectedIndex = j;
+        function findMatchFromList(text, list) {
+            for (var i, j = 0; i = list.options[j]; j++) {
+                if (text.value == i.value) {
+                    list.selectedIndex = j;
+                    if (text != document.getElementById("orderText")) return;
+                    var isDescCheckbox = document.getElementById("isDescCheckbox");
+                    var isDescLabel = document.getElementById("isDescLabel");
+                    isDescCheckbox.style.display = "";
+                    isDescLabel.style.display = "";
                     return;
                 }
             }
+            list.selectedIndex = 0;
 
-            labelList.selectedIndex = 0;
+            if (text != document.getElementById("orderText")) return;
+
+            var isDescCheckbox = document.getElementById("isDescCheckbox");
+            var isDescLabel = document.getElementById("isDescLabel");
+            isDescCheckbox.checked = false;
+            isDescCheckbox.style.display = "none";
+            isDescLabel.style.display = "none";
+        }
+
+        function changeTextValue(text, list) {
+            text.value = list.value;
+        }
+
+        document.getElementById("labelText").addEventListener('keyup', () => {
+            var labelText = document.getElementById("labelText");
+            var labelList = document.getElementById("labelList");
+
+            findMatchFromList(labelText, labelList);
         })
 
         document.getElementById("labelList").addEventListener('change', () => {
-            var textInput = document.getElementById("textInput");
+            var labelText = document.getElementById("labelText");
             var labelList = document.getElementById("labelList");
 
-            textInput.value = labelList.value;
+            changeTextValue(labelText, labelList);
+        })
+
+        document.getElementById("orderText").addEventListener('keyup', () => {
+            var orderText = document.getElementById("orderText");
+            var orderList = document.getElementById("orderList");
+
+            findMatchFromList(orderText, orderList);
+        })
+
+        document.getElementById("orderList").addEventListener('change', () => {
+            var orderText = document.getElementById("orderText");
+            var orderList = document.getElementById("orderList");
+
+            changeTextValue(orderText, orderList);
         })
     </script>
 }
