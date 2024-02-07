@@ -31,15 +31,18 @@ namespace Income_and_Expense_Record.Controllers
         public IActionResult Create()
         {
             var obj = new Money();
-            Money? objFromDb = _db.Moneys.FromSql($"select top 1 * from Moneys order by Date DESC").FirstOrDefault();
-            if (objFromDb != null)
-            {
-                obj.Date = objFromDb.Date;
-            }
-            else
-            {
-                obj.Date = DateTime.Now;
-            }
+            obj.Date = DateTime.Now;
+
+            //Money? objFromDb = _db.Moneys.FromSql($"select top 1 * from Moneys order by Date DESC").FirstOrDefault();
+            //if (objFromDb != null)
+            //{
+            //    obj.Date = objFromDb.Date;
+            //}
+            //else
+            //{
+            //    obj.Date = DateTime.Now;
+            //}
+
             return View(obj);
         }
 
