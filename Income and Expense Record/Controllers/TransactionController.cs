@@ -133,8 +133,6 @@ namespace Income_and_Expense_Record.Controllers
             bool isDesc = obj.IsDesc;
             string orderType = isDesc ? "desc" : "";
 
-            string query = "";
-
             string startDate = "...";
             string endDate = "...";
             string label = isLabel ? obj.Label : "...";
@@ -142,7 +140,9 @@ namespace Income_and_Expense_Record.Controllers
             string sqlEndDate = "...";
             bool isAlrCondition = false;
             decimal sum = 0;
-            
+       
+            string query = "select * from Transactions ";
+
             if (isStartDate)
             {
                 sqlStartDate = "'" + obj.StartDate.ToString("yyyy-MM-dd", CultureInfo.GetCultureInfo(culture)) + " 00:00:00.0000000" + "'";
@@ -154,25 +154,21 @@ namespace Income_and_Expense_Record.Controllers
             if (isStartDate && !isEndDate)
             {
                 startDate = obj.StartDate.Date.ToString("yyyy/MM/dd");
-                query = "select * from Transactions where Date >= " + sqlStartDate + " ";
+                query += "where Date >= " + sqlStartDate + " ";
                 isAlrCondition = true;
             }
             else if (!isStartDate && isEndDate)
             {
                 endDate = obj.EndDate.Date.ToString("yyyy/MM/dd");
-                query = "select * from Transactions where Date <= " + sqlEndDate + " ";
+                query += "where Date <= " + sqlEndDate + " ";
                 isAlrCondition = true;
             }
             else if (isStartDate && isEndDate)
             {
                 startDate = obj.StartDate.Date.ToString("yyyy/MM/dd");
                 endDate = obj.EndDate.Date.ToString("yyyy/MM/dd");
-                query = "select * from Transactions where Date >= " + sqlStartDate + " and Date <= " + sqlEndDate + " ";
+                query += "where Date >= " + sqlStartDate + " and Date <= " + sqlEndDate + " ";
                 isAlrCondition = true;
-            }
-            else
-            {
-                query = "select * from Transactions ";
             }
             if (isLabel)
             {
