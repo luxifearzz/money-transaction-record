@@ -8,9 +8,9 @@
 
         public DateTime EndDate { get; set; }
 
-        public string Label { get; set; }
+        public string? Label { get; set; }
 
-        public string OrderBy { get; set; }
+        public string? OrderBy { get; set; }
 
         public bool IsDesc { get; set; }
     }

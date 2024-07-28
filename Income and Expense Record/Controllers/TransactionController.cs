@@ -107,7 +107,7 @@ namespace Income_and_Expense_Record.Controllers
 
         public IActionResult Filter()
         {
-            IEnumerable<string> labelList = _db.Transactions.Select(t => t.Label).Distinct();
+            IEnumerable<string?> labelList = _db.Transactions.Select(t => t.Label).Distinct();
 
             List<SelectListItem> items = new List<SelectListItem>();
 
@@ -135,7 +135,7 @@ namespace Income_and_Expense_Record.Controllers
 
             string startDate = "...";
             string endDate = "...";
-            string label = isLabel ? obj.Label : "...";
+            string label = isLabel ? obj.Label! : "...";
             string sqlStartDate = "...";
             string sqlEndDate = "...";
             bool isAlrCondition = false;
