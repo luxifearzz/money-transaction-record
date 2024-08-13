@@ -4,6 +4,7 @@
     ViewData["Title"] = "หน้าแรก";
     decimal weekly_used = Model.Item2;
     decimal left_used = Model.Item3;
+    decimal used = weekly_used - left_used;
     decimal left = weekly_used;
     DateTime? before = null;
 }
@@ -24,11 +25,11 @@ else
     <strong class="text-success">จำนวนที่ใช้ได้ : @weekly_used บาท, 
         @if (left_used > 0)
         {
-            <span class="text-success">จำนวนคงเหลือ : @left_used บาท</span>
+            <span class="text-success">จำนวนที่ใช้ไป : @used บาท, จำนวนคงเหลือ : @left_used บาท</span>
         }
         else
         {
-            <span class="text-danger">จำนวนคงเหลือ : @left_used บาท</span>
+            <span class="text-danger">จำนวนที่ใช้ไป : @used บาท, จำนวนคงเหลือ : @left_used บาท</span>
         }
     </strong>
     <table class="table">
