@@ -12,5 +12,6 @@ namespace Income_and_Expense_Record.Data
 
         public DbSet<Money> Moneys { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Debt> Debts { get; set; }
     }
 }

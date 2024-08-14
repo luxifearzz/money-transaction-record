@@ -1,0 +1,30 @@
+﻿@model Debt;
+
+@{
+    ViewData["Title"] = "บันทึกข้อมูล";
+}
+
+<h1 class="text-center">บันทึกรายการ</h1>
+<form method="POST" asp-controller="Debt" asp-action="Create">
+    <div class="form-group my-3">
+        <label asp-for="Date"></label>
+        <input type="date" step="1" asp-for="Date" class="form-control" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+    <div class="form-group" my-3>
+        <label asp-for="Name"></label>
+        <input type="text" asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group my-3">
+        <label asp-for="Amount"></label>
+        <input type="number" step="0.01" asp-for="Amount" class="form-control" />
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+    <div class="form-group" my-3>
+        <label asp-for="Label"></label>
+        <input type="text" asp-for="Label" class="form-control" />
+        <span asp-validation-for="Label" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary my-3">บันทึก</button>
+</form>

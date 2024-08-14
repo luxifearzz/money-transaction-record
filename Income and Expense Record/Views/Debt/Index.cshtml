@@ -1,0 +1,70 @@
+﻿@model (IEnumerable<Debt>, decimal);
+
+@{
+    ViewData["Title"] = "หน้าแรก";
+    decimal used = Model.Item2;
+    DateTime? before = null;
+}
+
+<div class="text-center my-4">
+    <h1 class="" style="color: mediumslateblue">บันทึกเงินติดค้าง</h1>
+    <a class="btn btn-success mx-1" asp-controller="Debt" asp-action="Create">เพิ่มรายการ</a>
+    <a class="btn btn-info mx-1" onclick="return confirm('ต้องการจัดเก็บข้อมูลหรือไม่?')" asp-controller="Debt" asp-action="TransferData">จัดเก็บ</a>
+    <a class="btn btn-danger mx-1" asp-controller="Debt" asp-action="Clear" onclick="return confirm('ต้องการลบรายการทั้งหมดจริงหรือไม่!!?!') && confirm('ชัวร์นะ??')">ลบรายการทั้งหมด!!</a>
+</div>
+
+@if (Model.Item1.Count() == 0)
+{
+    <div class="alert alert-secondary">ไม่มีรายการเงินติดค้าง</div>
+}
+else
+{
+    <strong class="text-success">จำนวนที่ติดค้าง : @used บาท</strong>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>วันที่</th>
+                <th>ชื่อ</th>
+                <th>จำนวนเงิน</th>
+                <th>บันทึกช่วยจำ</th>
+                <th>แก้ไข</th>
+                <th>ลบ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var debt in Model.Item1)
+            {
+                <tr>
+                    @{
+                        var debt_date = debt.Date.Date;
+                        if (debt_date == before)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>@debt_date.ToString("dd/MM/yyyy")</td>
+                            before = debt_date;
+                        }
+                    }
+                    <td>@debt.Name</td>
+                    <td>@debt.Amount</td>
+                    <td>@debt.Label</td>
+                    <td>
+                        <a class="btn btn-warning"
+                           asp-controller="Debt"
+                           asp-action="Edit"
+                           asp-route-id="@debt.Id">แก้ไข</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger"
+                           asp-controller="Debt"
+                           asp-action="Delete"
+                           asp-route-id="@debt.Id"
+                           onclick="return confirm('ต้องการลบรายการ @debt.Label จำนวน @debt.Amount บาท ของวันที่ @debt.Date หรือไม่ ?')">ลบ</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
