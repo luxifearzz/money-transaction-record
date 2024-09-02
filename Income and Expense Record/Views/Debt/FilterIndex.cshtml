@@ -1,30 +1,38 @@
-﻿@model (IEnumerable<Debt>, decimal);
+﻿@model (IEnumerable<Debt>, string, string, string, string, string, string, decimal);
 
 @{
     ViewData["Title"] = "หน้าแรก";
-    decimal used = Model.Item2;
-    DateTime? before = null;
+    var before = DateTime.Now;
+    var debtList = Model.Item1;
+    var startDate = Model.Item2;
+    var endDate = Model.Item3;
+    var name = Model.Item4;
+    var label = Model.Item5;
+    var orderBy = Model.Item6;
+    var orderType = Model.Item7;
+    var sum_price = Model.Item8;
 }
 
 <div class="text-center my-4">
-    <h1 class="" style="color: mediumslateblue">บันทึกเงินติดค้าง</h1>
-    <a class="btn btn-success mx-1" asp-controller="Debt" asp-action="Create">เพิ่มรายการ</a>
-    <a class="btn btn-danger mx-1" asp-controller="Debt" asp-action="Clear" onclick="return confirm('ต้องการลบรายการทั้งหมดจริงหรือไม่!!?!') && confirm('ชัวร์นะ??')">ลบรายการทั้งหมด!!</a>
-    <a class="btn btn-secondary mx-1" asp-controller="Debt" asp-action="Filter">Filter</a>
+    <h1 class="" style="color: mediumslateblue">ประวัติรายรับ-ร่ายจ่ายทั้งหมดของวันที่ @startDate ถึงวันที่ @endDate ยืมโดย @name รายการชื่อ @label</h1>
+    <h3 class="" style="color: mediumslateblue">เรียงจาก @orderBy แบบ @orderType</h3>
+    <a class="btn btn-primary mx-1" asp-controller="Debt" asp-action="Index">กลับหน้าประวัติ</a>
+    <a class="btn btn-secondary mx-1" asp-controller="Debt" asp-action="Filter">แก้ไข filter</a>
+    @* <a class="btn btn-secondary mx-1" href='javascript:history.go(-1)'>แก้ไข filter</a> *@
 </div>
 
 @if (Model.Item1.Count() == 0)
 {
-    <div class="alert alert-secondary">ไม่มีรายการเงินติดค้าง</div>
+    <div class="alert alert-secondary">ไม่มีรายการยืม</div>
 }
 else
 {
-    <strong class="text-success">จำนวนที่ติดค้าง : @used บาท</strong>
+    <strong class="text-success">ราคารวม : @sum_price บาท</strong>
     <table class="table">
         <thead>
             <tr>
                 <th>วันที่</th>
-                <th>ชื่อ</th>
+                <th>ชื่อผู้ยืม</th>
                 <th>จำนวนเงิน</th>
                 <th>บันทึกช่วยจำ</th>
                 <th>แก้ไข</th>
@@ -32,7 +40,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var debt in Model.Item1)
+            @foreach (var debt in debtList)
             {
                 <tr>
                     @{

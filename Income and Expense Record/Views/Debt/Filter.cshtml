@@ -1,0 +1,99 @@
+﻿@model Filter;
+
+@{
+    ViewData["Title"] = "Filter";
+}
+
+<h1 class="text-center">Filter</h1>
+
+<form method="POST" asp-controller="Debt" asp-action="FilterIndex">
+    <div class="form-group my-3">
+        <label asp-for="StartDate">วันที่เริ่มต้น</label>
+        <input type="date" step="1" asp-for="StartDate" class="form-control" />
+    </div>
+    <div class="form-group my-3">
+        <label asp-for="EndDate">วันสิ้นสุด</label>
+        <input type="date" step="1" asp-for="EndDate" class="form-control" />
+    </div>
+    <div class="form-group my-3">
+        <label asp-for="Label">ชื่อผู้ยืม</label>
+        <input id="nameText" type="text" asp-for="Name" class="form-control" />
+        <select id="nameList" asp-for="Name" asp-items="@(ViewBag.LabelList as List<SelectListItem>)" class="btn btn-secondary dropdown-toggle"></select>
+    </div>
+    <div class="form-group my-3">
+        <label asp-for="Label">รายละเอียด</label>
+        <input type="text" asp-for="Label" class="form-control" />
+    </div>
+    <div class="form-group my-3">
+        <label asp-for="OrderBy">เรียงโดย?</label>
+        <input id="orderText" type="text" asp-for="OrderBy" class="form-control" value="Date" />
+        <select id="orderList" asp-for="OrderBy" class="btn btn-secondary dropdown-toggle" required>
+            <option value="Date" selected>Date (Default)</option>
+            <option value="Name">Name</option>
+            <option value="Label">Label</option>
+            <option value="Amount">Amount</option>
+        </select>
+        <input id="isDescCheckbox" type="checkbox" asp-for="IsDesc" />
+        <label id="isDescLabel" asp-for="IsDesc">*เรียงจากมากไปน้อย</label>
+    </div>
+    <button type="submit" class="btn btn-primary my-3">คัดกรอง</button>
+</form>
+
+@section Scripts {
+    <script type="text/javascript">
+        function findMatchFromList(text, list) {
+            for (var i, j = 0; i = list.options[j]; j++) {
+                if (text.value == i.value) {
+                    list.selectedIndex = j;
+                    if (text != document.getElementById("orderText")) return;
+                    var isDescCheckbox = document.getElementById("isDescCheckbox");
+                    var isDescLabel = document.getElementById("isDescLabel");
+                    isDescCheckbox.style.display = "";
+                    isDescLabel.style.display = "";
+                    return;
+                }
+            }
+            list.selectedIndex = 0;
+
+            if (text != document.getElementById("orderText")) return;
+
+            var isDescCheckbox = document.getElementById("isDescCheckbox");
+            var isDescLabel = document.getElementById("isDescLabel");
+            isDescCheckbox.checked = false;
+            isDescCheckbox.style.display = "none";
+            isDescLabel.style.display = "none";
+        }
+
+        function changeTextValue(text, list) {
+            text.value = list.value;
+        }
+
+        document.getElementById("nameText").addEventListener('keyup', () => {
+            var nameText = document.getElementById("nameText");
+            var nameList = document.getElementById("nameList");
+
+            findMatchFromList(nameText, nameList);
+        })
+
+        document.getElementById("nameList").addEventListener('change', () => {
+            var nameText = document.getElementById("nameText");
+            var nameList = document.getElementById("nameList");
+
+            changeTextValue(nameText, nameList);
+        })
+
+        document.getElementById("orderText").addEventListener('keyup', () => {
+            var orderText = document.getElementById("orderText");
+            var orderList = document.getElementById("orderList");
+
+            findMatchFromList(orderText, orderList);
+        })
+
+        document.getElementById("orderList").addEventListener('change', () => {
+            var orderText = document.getElementById("orderText");
+            var orderList = document.getElementById("orderList");
+
+            changeTextValue(orderText, orderList);
+        })
+    </script>
+}
