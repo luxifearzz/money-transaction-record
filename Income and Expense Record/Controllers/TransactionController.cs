@@ -129,8 +129,10 @@ namespace Income_and_Expense_Record.Controllers
             bool isStartDate = obj.StartDate != DateTime.MinValue;
             bool isEndDate = obj.EndDate != DateTime.MinValue;
             bool isLabel = !obj.Label.IsNullOrEmpty();
-            string[] orderByDomain = { "Date", "Label", "Amount" };
-            string orderBy = orderByDomain.Contains(obj.OrderBy) ? obj.OrderBy! : "Date";
+            //string[] orderByDomain = { "Date", "Label", "Amount" };
+            //string orderBy = orderByDomain.Contains(obj.OrderBy) ? obj.OrderBy! : "Date";
+            bool isOrderBy = !obj.OrderBy.IsNullOrEmpty();
+            string orderBy = isOrderBy ? obj.OrderBy! : "Date";
             bool isDesc = obj.IsDesc;
             string orderType = isDesc ? "desc" : "";
 
