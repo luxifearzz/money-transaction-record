@@ -168,20 +168,16 @@ namespace Income_and_Expense_Record.Controllers
             }
             if (isStartDate && !isEndDate)
             {
-                startDate = obj.StartDate.Date.ToString("yyyy/MM/dd");
                 query += "where Date >= " + sqlStartDate + " ";
                 isAlrCondition = true;
             }
             else if (!isStartDate && isEndDate)
             {
-                endDate = obj.EndDate.Date.ToString("yyyy/MM/dd");
                 query += "where Date <= " + sqlEndDate + " ";
                 isAlrCondition = true;
             }
             else if (isStartDate && isEndDate)
             {
-                startDate = obj.StartDate.Date.ToString("yyyy/MM/dd");
-                endDate = obj.EndDate.Date.ToString("yyyy/MM/dd");
                 query += "where Date >= " + sqlStartDate + " and Date <= " + sqlEndDate + " ";
                 isAlrCondition = true;
             }
@@ -189,11 +185,11 @@ namespace Income_and_Expense_Record.Controllers
             {
                 if (isAlrCondition)
                 {
-                    query += "and Name like '%" + obj.Name + "%' ";
+                    query += "and Name like N'%" + obj.Name + "%' ";
                 }
                 else
                 {
-                    query += "where Name like '%" + obj.Name + "%' ";
+                    query += "where Name like N'%" + obj.Name + "%' ";
                     isAlrCondition = true;
                 }
             }
@@ -201,11 +197,11 @@ namespace Income_and_Expense_Record.Controllers
             {
                 if (isAlrCondition)
                 {
-                    query += "and Label like '%" + obj.Label + "%' ";
+                    query += "and Label like N'%" + obj.Label + "%' ";
                 }
                 else
                 {
-                    query += "where Label like '%" + obj.Label + "%' ";
+                    query += "where Label like N'%" + obj.Label + "%' ";
                     isAlrCondition = true;
                 }
             }
