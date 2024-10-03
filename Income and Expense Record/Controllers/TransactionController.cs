@@ -136,8 +136,8 @@ namespace Income_and_Expense_Record.Controllers
             bool isDesc = obj.IsDesc;
             string orderType = isDesc ? "desc" : "";
 
-            string startDate = "...";
-            string endDate = "...";
+            string startDate = isStartDate ? obj.StartDate.ToString("yyyy-MM-dd", CultureInfo.GetCultureInfo(culture)) : "...";
+            string endDate = isEndDate ? obj.EndDate.ToString("yyyy-MM-dd", CultureInfo.GetCultureInfo(culture)) : "...";
             string label = isLabel ? obj.Label! : "...";
             string sqlStartDate = "...";
             string sqlEndDate = "...";
@@ -148,11 +148,11 @@ namespace Income_and_Expense_Record.Controllers
 
             if (isStartDate)
             {
-                sqlStartDate = "'" + obj.StartDate.ToString("yyyy-MM-dd", CultureInfo.GetCultureInfo(culture)) + " 00:00:00.0000000" + "'";
+                sqlStartDate = "'" + startDate + " 00:00:00.0000000" + "'";
             }
             if (isEndDate)
             {
-                sqlEndDate = "'" + obj.EndDate.ToString("yyyy-MM-dd", CultureInfo.GetCultureInfo(culture)) + " 00:00:00.0000000" + "'";
+                sqlEndDate = "'" + endDate + " 00:00:00.0000000" + "'";
             }
             if (isStartDate && !isEndDate)
             {
